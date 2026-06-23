@@ -42,13 +42,13 @@ fun AboutScreen() {
                 val isWide = maxWidth > 700.dp
                 if (isWide) {
                     Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.Top) {
-                        HeroSection(profile.name, profile.tagline, profile.bio, profile.email, profile.cvUrl, Modifier.weight(1f))
+                        HeroSection(profile.name, profile.tagline, profile.bio, profile.email, profile.cvUrl, profile.discordUrl, Modifier.weight(1f))
                         Spacer(Modifier.width(Dimens.xl))
                         StatsGrid(profile.stats, Modifier.widthIn(min = 280.dp, max = 320.dp))
                     }
                 } else {
                     Column {
-                        HeroSection(profile.name, profile.tagline, profile.bio, profile.email, profile.cvUrl, Modifier.fillMaxWidth())
+                        HeroSection(profile.name, profile.tagline, profile.bio, profile.email, profile.cvUrl, profile.discordUrl, Modifier.fillMaxWidth())
                         Spacer(Modifier.height(Dimens.xl))
                         StatsGrid(profile.stats, Modifier.fillMaxWidth())
                     }

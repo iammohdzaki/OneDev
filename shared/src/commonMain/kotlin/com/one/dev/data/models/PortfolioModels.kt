@@ -36,17 +36,22 @@ data class PortfolioProfile(
     val bio: String = "",
     val skills: List<String> = emptyList(),
     val stats: ProfileStats = ProfileStats(),
-    val github: String = "",
-    val linkedin: String = "",
-    val email: String = "",
     val repoUrl: String = "",
     val repoLabel: String = "",
     val socials: List<SocialLink> = emptyList(),
     val skillBars: List<SkillBar> = emptyList(),
     val experiences: List<Experience> = emptyList(),
     val philosophy: List<CorePhilosophy> = emptyList(),
-    val cvUrl: String = ""
+    val cvUrl: String = "",
+    val discordUrl: String = ""
 ) {
+    val github: String
+        get() = socials.firstOrNull { it.label.equals("Github", ignoreCase = true) }?.url.orEmpty()
+    val linkedin: String
+        get() = socials.firstOrNull { it.label.equals("LinkedIn", ignoreCase = true) }?.url.orEmpty()
+    val email: String
+        get() = socials.firstOrNull { it.label.equals("Email", ignoreCase = true) }?.url.orEmpty()
+
     companion object {
         val EMPTY = PortfolioProfile()
     }
@@ -68,16 +73,14 @@ data class ProfileDto(
     val bio: String,
     val skills: List<String>,
     val stats: ProfileStatsDto,
-    val github: String,
-    val linkedin: String,
-    val email: String,
     val repoUrl: String = "",
     val repoLabel: String = "",
     val socials: List<SocialLink> = emptyList(),
     val skillBars: List<SkillBar> = emptyList(),
     val experiences: List<Experience> = emptyList(),
     val philosophy: List<CorePhilosophy> = emptyList(),
-    val cvUrl: String = ""
+    val cvUrl: String = "",
+    val discordUrl: String = ""
 )
 
 @Serializable
@@ -120,16 +123,14 @@ fun ProfileDto.toDomain() = PortfolioProfile(
         articlesWritten = stats.articlesWritten,
         commitsThisYear = stats.commitsThisYear
     ),
-    github = github,
-    linkedin = linkedin,
-    email = email,
     repoUrl = repoUrl,
     repoLabel = repoLabel,
     socials = socials,
     skillBars = skillBars,
     experiences = experiences,
     philosophy = philosophy,
-    cvUrl = cvUrl
+    cvUrl = cvUrl,
+    discordUrl = discordUrl
 )
 
 fun ProjectDto.toDomain(): PortfolioProject {

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -37,6 +39,7 @@ fun HeroSection(
     bio: String,
     email: String,
     cvUrl: String,
+    discordUrl: String,
     modifier: Modifier = Modifier
 ) {
     val cursorTransition = rememberInfiniteTransition(label = "cursor")
@@ -137,6 +140,25 @@ fun HeroSection(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
                 ) {
                     Text("view_cv.sh", fontFamily = JetBrainsMono, fontWeight = FontWeight.Bold)
+                }
+            }
+            if (discordUrl.isNotEmpty()) {
+                Button(
+                    onClick = {
+                        try {
+                            uriHandler.openUri(discordUrl)
+                        } catch (e: Exception) {}
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF5865F2), // Discord blurple color
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(4.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
+                ) {
+                    Icon(Icons.Default.Send, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("Discord", fontWeight = FontWeight.Bold)
                 }
             }
         }
