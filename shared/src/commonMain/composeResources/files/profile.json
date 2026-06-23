@@ -1,0 +1,105 @@
+{
+  "name": "Mohammad Zaki",
+  "tagline": "Building cross-platform tools that devs love.",
+  "bio": "KMP / Android engineer obsessed with DX and beautiful UIs. Creator of OneKore and FixLag.",
+  "skills": ["Kotlin", "KMP", "Compose", "WASM", "Android", "Ktor", "Koin", "MVI"],
+  "stats": {
+    "yearsExperience": 5,
+    "projectsBuilt": 20,
+    "articlesWritten": 8,
+    "commitsThisYear": "900+"
+  },
+  "github": "https://github.com/iammohdzaki",
+  "linkedin": "https://linkedin.com/in/mohammad.zaki",
+  "email": "mohdzaki407@gmail.com",
+  "repoUrl": "https://github.com/mohdzaki/OneDev",
+  "repoLabel": "github.com/mohdzaki/OneDev",
+  "socials": [
+    {
+      "label": "Github",
+      "url": "https://github.com/iammohdzaki"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://linkedin.com/in/mohammad.zaki"
+    },
+    {
+      "label": "StackOverflow",
+      "url": "https://stackoverflow.com"
+    }
+  ],
+  "skillBars": [
+    {
+      "name": "Kotlin / Multiplatform",
+      "percentage": 95.0
+    },
+    {
+      "name": "Jetpack Compose",
+      "percentage": 92.0
+    },
+    {
+      "name": "Android Framework",
+      "percentage": 90.0
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Senior Multiplatform Engineer",
+      "company": "Global Tech Systems",
+      "role": "Lead Architect",
+      "period": "2022 — Present",
+      "description": "Spearheaded the transition of legacy Android applications to Kotlin Multiplatform. Designed a unified shared-core architecture reducing code duplication by 65% across 3 platforms.",
+      "highlights": [
+        "Implemented custom Compose Multiplatform Canvas components",
+        "Optimized cold-start performance by 30% through modularization",
+        "Mentored a team of 12 junior-to-mid Android engineers"
+      ]
+    },
+    {
+      "title": "Android Developer",
+      "company": "FinVibe Labs",
+      "role": "Core Team",
+      "period": "2020 — 2022",
+      "description": "Owned the UI overhaul of the flagship fintech app using Jetpack Compose, achieving a 4.8 rating on the Play Store. Focused on accessibility and complex state management using MVI.",
+      "highlights": []
+    },
+    {
+      "title": "Open Source Contributor",
+      "company": "Self-Directed",
+      "role": "",
+      "period": "2018 — 2020",
+      "description": "Developed and maintained several Android utility libraries. FixLag became a staple for debugging UI jank in early Compose versions.",
+      "highlights": []
+    },
+    {
+      "title": "Open Source Contributor23",
+      "company": "Self-Directed",
+      "role": "",
+      "period": "2018 — 2020",
+      "description": "Developed and maintained several Android utility libraries. FixLag became a staple for debugging UI jank in early Compose versions.",
+      "highlights": []
+    }
+  ],
+  "philosophy": [
+    {
+      "emoji": "⚡",
+      "text": "Prioritize Maintainability over clever hacks.",
+      "bold": "Maintainability"
+    },
+    {
+      "emoji": "✅",
+      "text": "Performance is a Feature, not a polish step.",
+      "bold": "Feature"
+    },
+    {
+      "emoji": "🔷",
+      "text": "UI logic belongs in Domain-Driven states.",
+      "bold": "Domain-Driven"
+    },
+    {
+      "emoji": "🔷",
+      "text": "UI22222 logic belongs in Domain-Driven states.",
+      "bold": "Domain-Driven"
+    }
+  ]
+}

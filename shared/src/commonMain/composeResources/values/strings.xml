@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Mohammad Zaki | Portfolio</string>
+    <string name="btn_back">Back</string>
+    <string name="content_desc_toggle_theme">Toggle Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="no_content">No content available for this project.</string>
+    <string name="error_loading_data">Failed to load portfolio data</string>
+    
+    <!-- UI Strings -->
+    <string name="contact_me">Contact Me</string>
+    <string name="impact_highlights">IMPACT HIGHLIGHTS</string>
+    <string name="filter_by_tech">FILTER BY TECHNOLOGY:</string>
+    <string name="projects_label">PROJECTS</string>
+    <string name="no_projects_match">// No projects match active filter</string>
+    <string name="project_not_found">Project not found</string>
+    <string name="go_back">Go Back</string>
+    <string name="back_to_gallery">BACK TO GALLERY</string>
+    <string name="metadata_label">METADATA</string>
+    <string name="release_status_label">Release Status:</string>
+    <string name="released_status">RELEASED</string>
+    <string name="under_dev_status">UNDER DEVELOPMENT</string>
+    <string name="group_label">Group:</string>
+    <string name="category_label">Category:</string>
+    <string name="technologies_label">Technologies:</string>
+    <string name="links_label">Links:</string>
+    <string name="github_code_btn">GitHub Code</string>
+    <string name="live_demo_btn">Live Demo</string>
+    <string name="tab_me">Me</string>
+    <string name="tab_projects">Projects</string>
+</resources>
