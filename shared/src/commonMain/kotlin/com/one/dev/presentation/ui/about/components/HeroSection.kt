@@ -315,4 +315,3 @@ private val DiscordIcon: ImageVector
         curveTo(18.025f, 14.912f, 17.137f, 15.932f, 16.012f, 15.932f)
         close()
     }.build()
-}
