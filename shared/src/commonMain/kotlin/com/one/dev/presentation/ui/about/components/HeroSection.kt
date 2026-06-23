@@ -8,9 +8,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +31,14 @@ import org.jetbrains.compose.resources.stringResource
 import onedev.shared.generated.resources.*
 
 @Composable
-fun HeroSection(name: String, bio: String, modifier: Modifier = Modifier) {
+fun HeroSection(
+    name: String,
+    tagline: String,
+    bio: String,
+    email: String,
+    cvUrl: String,
+    modifier: Modifier = Modifier
+) {
     val cursorTransition = rememberInfiniteTransition(label = "cursor")
     val cursorAlpha by cursorTransition.animateFloat(
         initialValue = 0f,
@@ -36,6 +49,15 @@ fun HeroSection(name: String, bio: String, modifier: Modifier = Modifier) {
         ),
         label = "cursorAlpha"
     )
+
+    var typedText by remember(tagline) { mutableStateOf("") }
+    LaunchedEffect(tagline) {
+        typedText = ""
+        for (i in 1..tagline.length) {
+            typedText = tagline.substring(0, i)
+            delay(40L)
+        }
+    }
 
     Column(modifier) {
         Text(
@@ -56,7 +78,7 @@ fun HeroSection(name: String, bio: String, modifier: Modifier = Modifier) {
         Spacer(Modifier.height(Dimens.xs))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "KMP / Android Engineer",
+                text = typedText,
                 style = MaterialTheme.typography.headlineSmall,
                 color = GitBlue,
                 fontFamily = JetBrainsMono,
@@ -73,21 +95,22 @@ fun HeroSection(name: String, bio: String, modifier: Modifier = Modifier) {
         }
         Spacer(Modifier.height(Dimens.md))
         Text(
-            text = buildAnnotatedString {
-                append("Obsessed with developer experience (DX) and crafting fluid, high-performance UIs. Creator of ")
-                withStyle(SpanStyle(color = GitGreen, fontWeight = FontWeight.SemiBold)) { append("OneKore") }
-                append(" and ")
-                withStyle(SpanStyle(color = GitGreen, fontWeight = FontWeight.SemiBold)) { append("FixLag") }
-                append(". Bridging the gap between robust multiplatform architecture and pixel-perfect aesthetics.")
-            },
+            text = bio,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             lineHeight = 26.sp,
         )
+        val uriHandler = LocalUriHandler.current
         Spacer(Modifier.height(Dimens.lg))
         Row(horizontalArrangement = Arrangement.spacedBy(Dimens.md)) {
             Button(
-                onClick = {},
+                onClick = {
+                    if (email.isNotEmpty()) {
+                        try {
+                            uriHandler.openUri("mailto:$email")
+                        } catch (e: Exception) {}
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.background
@@ -99,16 +122,22 @@ fun HeroSection(name: String, bio: String, modifier: Modifier = Modifier) {
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(Res.string.contact_me), fontWeight = FontWeight.Bold)
             }
-            OutlinedButton(
-                onClick = {},
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.primary
-                ),
-                shape = RoundedCornerShape(4.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                Text("view_cv.sh", fontFamily = JetBrainsMono, fontWeight = FontWeight.Bold)
+            if (cvUrl.isNotEmpty()) {
+                OutlinedButton(
+                    onClick = {
+                        try {
+                            uriHandler.openUri(cvUrl)
+                        } catch (e: Exception) {}
+                    },
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    shape = RoundedCornerShape(4.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
+                ) {
+                    Text("view_cv.sh", fontFamily = JetBrainsMono, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }

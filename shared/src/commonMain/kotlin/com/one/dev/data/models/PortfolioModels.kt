@@ -44,7 +44,8 @@ data class PortfolioProfile(
     val socials: List<SocialLink> = emptyList(),
     val skillBars: List<SkillBar> = emptyList(),
     val experiences: List<Experience> = emptyList(),
-    val philosophy: List<CorePhilosophy> = emptyList()
+    val philosophy: List<CorePhilosophy> = emptyList(),
+    val cvUrl: String = ""
 ) {
     companion object {
         val EMPTY = PortfolioProfile()
@@ -75,7 +76,8 @@ data class ProfileDto(
     val socials: List<SocialLink> = emptyList(),
     val skillBars: List<SkillBar> = emptyList(),
     val experiences: List<Experience> = emptyList(),
-    val philosophy: List<CorePhilosophy> = emptyList()
+    val philosophy: List<CorePhilosophy> = emptyList(),
+    val cvUrl: String = ""
 )
 
 @Serializable
@@ -126,7 +128,8 @@ fun ProfileDto.toDomain() = PortfolioProfile(
     socials = socials,
     skillBars = skillBars,
     experiences = experiences,
-    philosophy = philosophy
+    philosophy = philosophy,
+    cvUrl = cvUrl
 )
 
 fun ProjectDto.toDomain(): PortfolioProject {

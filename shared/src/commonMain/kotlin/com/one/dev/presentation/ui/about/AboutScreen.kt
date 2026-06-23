@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.one.dev.data.LocalPortfolioRepository
 import com.one.dev.data.models.PortfolioProfile
-import com.one.dev.presentation.ui.about.components.HeroSection
-import com.one.dev.presentation.ui.about.components.StatsGrid
-import com.one.dev.presentation.ui.about.components.SkillsSection
 import com.one.dev.presentation.ui.about.components.ExperienceSection
+import com.one.dev.presentation.ui.about.components.HeroSection
+import com.one.dev.presentation.ui.about.components.SkillsSection
+import com.one.dev.presentation.ui.about.components.StatsGrid
 import com.one.dev.presentation.ui.theme.BgPrimary
 import com.one.dev.presentation.ui.theme.Dimens
 
@@ -23,7 +23,7 @@ fun AboutScreen() {
     LaunchedEffect(Unit) {
         profile = LocalPortfolioRepository.getProfile()
     }
-    val skills     = profile.skillBars
+    val skills = profile.skillBars
     val experience = profile.experiences
     val philosophy = profile.philosophy
 
@@ -42,13 +42,13 @@ fun AboutScreen() {
                 val isWide = maxWidth > 700.dp
                 if (isWide) {
                     Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.Top) {
-                        HeroSection(profile.name, profile.bio, Modifier.weight(1f))
+                        HeroSection(profile.name, profile.tagline, profile.bio, profile.email, profile.cvUrl, Modifier.weight(1f))
                         Spacer(Modifier.width(Dimens.xl))
                         StatsGrid(profile.stats, Modifier.widthIn(min = 280.dp, max = 320.dp))
                     }
                 } else {
                     Column {
-                        HeroSection(profile.name, profile.bio, Modifier.fillMaxWidth())
+                        HeroSection(profile.name, profile.tagline, profile.bio, profile.email, profile.cvUrl, Modifier.fillMaxWidth())
                         Spacer(Modifier.height(Dimens.xl))
                         StatsGrid(profile.stats, Modifier.fillMaxWidth())
                     }

@@ -1,18 +1,14 @@
 package com.one.dev.presentation.ui.shell
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.Icon
-import androidx.compose.foundation.hoverable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -27,10 +23,14 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.one.dev.navigation.Routes
 import com.one.dev.data.models.PortfolioProfile
+import com.one.dev.navigation.Routes
 import com.one.dev.presentation.ui.theme.GitGreen
 import com.one.dev.presentation.ui.theme.JetBrainsMono
+import onedev.shared.generated.resources.Res
+import onedev.shared.generated.resources.tab_me
+import onedev.shared.generated.resources.tab_projects
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Top bar matching Stitch header:
@@ -81,7 +81,7 @@ fun TopBar(
             val uriHandler = LocalUriHandler.current
             val interactionSource = remember { MutableInteractionSource() }
             val isHovered by interactionSource.collectIsHoveredAsState()
-            
+
             Box(
                 modifier = Modifier
                     .padding(end = 24.dp)
@@ -93,7 +93,10 @@ fun TopBar(
                         interactionSource = interactionSource,
                         indication = null
                     ) {
-                        try { uriHandler.openUri(profile.github) } catch (e: Exception) {}
+                        try {
+                            uriHandler.openUri(profile.github)
+                        } catch (e: Exception) {
+                        }
                     },
                 contentAlignment = Alignment.Center
             ) {
@@ -130,11 +133,11 @@ private fun NavTab(
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary // #00F0FF (Neon Cyan)
     val neutralBg = MaterialTheme.colorScheme.background // #0C0E10
-    
+
     val textColor = if (isActive) neutralBg else primaryColor
     val backgroundColor = if (isActive) primaryColor else Color.Transparent
     val borderStroke = if (isActive) null else BorderStroke(1.dp, primaryColor.copy(alpha = 0.8f))
-    
+
     // Futuristic cut corner shape for a cyberpunk tech feel
     val tabShape = CutCornerShape(topStart = 6.dp, bottomEnd = 6.dp)
 
@@ -192,7 +195,7 @@ fun BottomStatusBar(
     ) {
         // Left
         Row(
-            verticalAlignment = Alignment.CenterVertically, 
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
@@ -202,69 +205,86 @@ fun BottomStatusBar(
                 fontFamily = JetBrainsMono,
                 fontSize = 11.sp
             )
-            Box(Modifier.size(4.dp).clip(CircleShape).background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
-            
+            Box(
+                Modifier.size(4.dp).clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+            )
+
             val gitInteractionSource = remember { MutableInteractionSource() }
             val isGitHovered by gitInteractionSource.collectIsHoveredAsState()
             Text(
-                text = "github.com/mohdzaki/OneDev",
+                text = profile.repoLabel.ifEmpty { "github.com/mohdzaki/OneDev" },
                 style = MaterialTheme.typography.labelSmall.copy(
                     textDecoration = if (isGitHovered) androidx.compose.ui.text.style.TextDecoration.Underline else null
                 ),
-                color = if (isGitHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                color = if (isGitHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                    alpha = 0.8f
+                ),
                 fontFamily = JetBrainsMono,
                 fontSize = 11.sp,
                 modifier = Modifier
                     .hoverable(gitInteractionSource)
                     .clickable(interactionSource = gitInteractionSource, indication = null) {
-                        try { uriHandler.openUri("https://github.com/mohdzaki/OneDev") } catch (e: Exception) {}
+                        try {
+                            uriHandler.openUri(profile.repoUrl.ifEmpty { "https://github.com/mohdzaki/OneDev" })
+                        } catch (e: Exception) {
+                        }
                     }
             )
 
-            Box(Modifier.size(4.dp).clip(CircleShape).background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)))
+            Box(
+                Modifier.size(4.dp).clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+            )
 
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Box(Modifier.size(6.dp).clip(CircleShape).background(GitGreen))
                 Text(
-                    "Branch: main*", 
+                    "Branch: main*",
                     style = MaterialTheme.typography.labelSmall,
-                    color = GitGreen, 
-                    fontFamily = JetBrainsMono, 
+                    color = GitGreen,
+                    fontFamily = JetBrainsMono,
                     fontSize = 11.sp
                 )
             }
         }
-        
+
         // Right
         Row(
-            verticalAlignment = Alignment.CenterVertically, 
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            val socialLinks = listOf(
-                "Github" to "https://github.com/iammohdzaki",
-                "LinkedIn" to "https://linkedin.com/in/mohammad.zaki",
-                "StackOverflow" to "https://stackoverflow.com"
-            )
-            
-            socialLinks.forEach { (label, url) ->
+            val socialLinks = profile.socials.ifEmpty {
+                listOf(
+                    com.one.dev.data.models.SocialLink("Github", "https://github.com/iammohdzaki"),
+                    com.one.dev.data.models.SocialLink("LinkedIn", "https://linkedin.com/in/mohammad.zaki")
+                )
+            }
+
+            socialLinks.forEach { link ->
                 val interactionSource = remember { MutableInteractionSource() }
                 val isHovered by interactionSource.collectIsHoveredAsState()
                 Text(
-                    text = label,
+                    text = link.label,
                     style = MaterialTheme.typography.labelSmall.copy(
                         textDecoration = if (isHovered) androidx.compose.ui.text.style.TextDecoration.Underline else null
                     ),
-                    color = if (isHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f),
+                    color = if (isHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                        0.6f
+                    ),
                     fontFamily = JetBrainsMono,
                     fontSize = 11.sp,
                     modifier = Modifier
                         .hoverable(interactionSource)
                         .clickable(interactionSource = interactionSource, indication = null) {
-                            try { uriHandler.openUri(url) } catch (e: Exception) {}
+                            try {
+                                uriHandler.openUri(link.url)
+                            } catch (e: Exception) {
+                            }
                         }
                 )
             }
-            
+
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 Box(Modifier.size(6.dp).clip(CircleShape).background(GitGreen))
                 Text(

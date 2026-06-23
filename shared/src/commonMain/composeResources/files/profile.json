@@ -1,19 +1,20 @@
 {
   "name": "Mohammad Zaki",
   "tagline": "Building cross-platform tools that devs love.",
-  "bio": "KMP / Android engineer obsessed with DX and beautiful UIs. Creator of OneKore and FixLag.",
-  "skills": ["Kotlin", "KMP", "Compose", "WASM", "Android", "Ktor", "Koin", "MVI"],
+  "bio": "KMP / Android engineer obsessed with DX and beautiful UIs. Creator of StudyAI and OneManage.",
+  "skills": ["Kotlin", "KMP", "Compose", "Android", "Ktor", "Koin", "MVI"],
   "stats": {
-    "yearsExperience": 5,
+    "yearsExperience": 6,
     "projectsBuilt": 20,
-    "articlesWritten": 8,
-    "commitsThisYear": "900+"
+    "articlesWritten": 0,
+    "commitsThisYear": "200+"
   },
   "github": "https://github.com/iammohdzaki",
-  "linkedin": "https://linkedin.com/in/mohammad.zaki",
+  "linkedin": "https://www.linkedin.com/in/mohammad-zaki-60448a148/",
   "email": "mohdzaki407@gmail.com",
-  "repoUrl": "https://github.com/mohdzaki/OneDev",
-  "repoLabel": "github.com/mohdzaki/OneDev",
+  "repoUrl": "https://github.com/iammohdzaki/OneDev",
+  "repoLabel": "github.com/iammohdzaki/OneDev",
+  "cvUrl": "https://github.com/iammohdzaki",
   "socials": [
     {
       "label": "Github",
@@ -24,8 +25,8 @@
       "url": "https://linkedin.com/in/mohammad.zaki"
     },
     {
-      "label": "StackOverflow",
-      "url": "https://stackoverflow.com"
+      "label": "Email",
+      "url": "mohdzaki407@gmail.com"
     }
   ],
   "skillBars": [
@@ -35,49 +36,58 @@
     },
     {
       "name": "Jetpack Compose",
-      "percentage": 92.0
+      "percentage": 76.0
     },
     {
       "name": "Android Framework",
-      "percentage": 90.0
+      "percentage": 95.0
+    },
+    {
+      "name": "Ktor Server",
+      "percentage": 95.0
+    },
+    {
+      "name": "AI Agents",
+      "percentage": 70
     }
   ],
   "experiences": [
     {
-      "title": "Senior Multiplatform Engineer",
-      "company": "Global Tech Systems",
-      "role": "Lead Architect",
-      "period": "2022 — Present",
-      "description": "Spearheaded the transition of legacy Android applications to Kotlin Multiplatform. Designed a unified shared-core architecture reducing code duplication by 65% across 3 platforms.",
+      "title": "Senior Software Engineer",
+      "company": "Global Logic",
+      "role": "Platform Core Team",
+      "period": "2023 — Present",
+      "description": "Led the decoupling of a monolithic codebase into feature-specific modules, enabling parallel development streams and improving build times for the core team.",
       "highlights": [
-        "Implemented custom Compose Multiplatform Canvas components",
-        "Optimized cold-start performance by 30% through modularization",
-        "Mentored a team of 12 junior-to-mid Android engineers"
+        "Engineered a high-performance Card Scanning module for a major telecom application, utilizing optimized image processing to boost scanning success rates by 124% (from 33% to 74%).",
+        "Spearheaded the migration of the data layer from GSON to Kotlinx Serialization, achieving a 20% increase in parsing speed and significantly reducing memory overhead.",
+        "Optimized application startup time by profiling bottlenecks and integrating the Jetpack App Startup library, resulting in a seamless cold-start experience.",
+        "Recognized with a Certificate of Appreciation (Feb 2025) for exceptional delivery and innovation in core architecture optimization"
       ]
     },
     {
-      "title": "Android Developer",
-      "company": "FinVibe Labs",
-      "role": "Core Team",
-      "period": "2020 — 2022",
-      "description": "Owned the UI overhaul of the flagship fintech app using Jetpack Compose, achieving a 4.8 rating on the Play Store. Focused on accessibility and complex state management using MVI.",
-      "highlights": []
+      "title": "Senior Android Developer",
+      "company": "AppyHigh LLC",
+      "role": "Product Engineer",
+      "period": "2022 — 2023",
+      "description": "Developed and maintained several apps improving app sizes, crash rates and server million of users.",
+      "highlights": [
+        "Orchestrated a comprehensive refactoring of the Instore app (2M+ downloads), utilizing R8/ProGuard optimization to reduce APK size by 75% (80MB to 20MB), driving higher install conversions.",
+        "Maintained product stability for millions of users by establishing quality gates, achieving a 99.9% crash-free rate via Firebase Crashlytics monitoring",
+        "Designed and implemented a serverless “Refer and Earn” reward system, leveraging local logic to eliminate backend costs while increasing user retention.",
+        "Revamped the UI/UX for the Collage Maker app (50k+ downloads), implementing dynamic layouts and custom views to improve user engagement",
+        "Mentored junior developers on Android best practices, code reviews, and architectural patterns (MVVM/Clean Architecture)."
+      ]
     },
     {
-      "title": "Open Source Contributor",
-      "company": "Self-Directed",
-      "role": "",
-      "period": "2018 — 2020",
-      "description": "Developed and maintained several Android utility libraries. FixLag became a staple for debugging UI jank in early Compose versions.",
-      "highlights": []
-    },
-    {
-      "title": "Open Source Contributor23",
-      "company": "Self-Directed",
-      "role": "",
-      "period": "2018 — 2020",
-      "description": "Developed and maintained several Android utility libraries. FixLag became a staple for debugging UI jank in early Compose versions.",
-      "highlights": []
+      "title": "Software Engineer",
+      "company": "JungleWorks",
+      "role": "Product Engineer",
+      "period": "2019 — 2022",
+      "description": "Developed critical features for the Mr. Delivery and Logistech suites, including multi-merchant carts, payment gateway integrations (Stripe, HyperPay), and real-time driver tracking.",
+      "highlights": [
+        "Awarded Employee of the Month for demonstrating ownership and delivering critical features ahead of schedule"
+      ]
     }
   ],
   "philosophy": [
@@ -98,8 +108,8 @@
     },
     {
       "emoji": "🔷",
-      "text": "UI22222 logic belongs in Domain-Driven states.",
-      "bold": "Domain-Driven"
+      "text": "Build Scalable Architecture at start, will help in long run.",
+      "bold": "Scalable Architecture"
     }
   ]
 }
