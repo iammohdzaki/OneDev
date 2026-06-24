@@ -34,11 +34,12 @@ jobs:
           CD_DIR="webApp/build/dist/wasmJs/productionExecutable"
           cd "$CD_DIR"
           
-          echo "Compressing webApp.wasm..."
+          echo "Compressing assets..."
           # Pre-compress .wasm, .js, .html, and .css files with max compression level
-          gzip -9 -k webApp.wasm || true
-          gzip -9 -k webApp.js || true
-          gzip -9 -k index.html || true
+          gzip -9 -k *.wasm || true
+          gzip -9 -k *.js || true
+          gzip -9 -k *.html || true
+          gzip -9 -k *.css || true
           
           echo "Current directory contents:"
           ls -lh
