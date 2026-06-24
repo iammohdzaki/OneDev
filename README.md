@@ -4,6 +4,12 @@ A premium, modern developer portfolio built entirely with **Kotlin Multiplatform
 
 This portfolio is **100% data-driven**—all personal details, social accounts, professional experiences, and projects are managed dynamically using JSON configurations. No hardcoded Kotlin code modifications are required to make it your own!
 
+## 📸 Screenshots
+
+| About Screen | Projects Screen |
+| :---: | :---: |
+| ![About Screen](preview/me.png) | ![Projects Screen](preview/projects.png) |
+
 ---
 
 ## 🚀 Key Features
