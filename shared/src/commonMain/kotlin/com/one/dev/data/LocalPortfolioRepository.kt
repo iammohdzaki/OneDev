@@ -4,6 +4,10 @@ import com.one.dev.data.models.*
 import kotlinx.serialization.json.Json
 import onedev.shared.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 
 object LocalPortfolioRepository {
 
@@ -42,13 +46,88 @@ object LocalPortfolioRepository {
     }
 
     @OptIn(ExperimentalResourceApi::class)
-    suspend fun getProjectDetailsMarkdown(detailsPath: String): String {
-        return try {
-            val bytes = Res.readBytes("files/$detailsPath")
-            decodeUtf8(bytes)
-        } catch (e: Exception) {
-            "Error loading project details: ${e.message}"
+    suspend fun getProjectDetailsMarkdown(project: PortfolioProject): String {
+        if (project.details.isNotEmpty()) {
+            return try {
+                val bytes = Res.readBytes("files/projects/${project.details}")
+                decodeUtf8(bytes)
+            } catch (e: Exception) {
+                "Error loading project details: ${e.message}"
+            }
         }
+
+        val fetchUrl = when {
+            project.demoUrl != null && project.demoUrl.contains("github.com") -> project.demoUrl
+            project.githubUrl.isNotEmpty() -> project.githubUrl
+            else -> null
+        }
+
+        if (project.isPublic && fetchUrl != null) {
+            val githubReadmeUrl = getRawGithubReadmeUrl(fetchUrl)
+            if (githubReadmeUrl != null) {
+                try {
+                    val client = HttpClient()
+                    val response = client.get(githubReadmeUrl)
+                    if (response.status == HttpStatusCode.OK) {
+                        return response.bodyAsText()
+                    } else {
+                        // Fall back to master branch
+                        val fallbackUrl = githubReadmeUrl.replace("/main/README.md", "/master/README.md")
+                        val fallbackResponse = client.get(fallbackUrl)
+                        if (fallbackResponse.status == HttpStatusCode.OK) {
+                            return fallbackResponse.bodyAsText()
+                        }
+                    }
+                } catch (e: Exception) {
+                    return "⚠️ **Failed to fetch remote README from `$githubReadmeUrl`**: *${e.message ?: "Unknown error"}*"
+                }
+            }
+        }
+
+        return "No details specified and unable to fetch remote README."
+    }
+
+    private fun getRawGithubReadmeUrl(githubUrl: String): String? {
+        if (!githubUrl.contains("github.com/")) return null
+        val cleanUrl = githubUrl.trim().removeSuffix("/").removeSuffix(".git")
+        val parts = cleanUrl.split("github.com/")
+        if (parts.size < 2) return null
+        val path = parts[1]
+        val segments = path.split("/").filter { it.isNotEmpty() }
+        if (segments.size < 2) return null
+        val owner = segments[0]
+        val repo = segments[1]
+
+        var branch = "main"
+        var filePath = "README.md"
+
+        if (segments.size >= 4 && (segments[2] == "blob" || segments[2] == "tree")) {
+            branch = segments[3]
+            if (segments.size > 4) {
+                filePath = segments.subList(4, segments.size).joinToString("/")
+            }
+        }
+
+        return "https://raw.githubusercontent.com/$owner/$repo/$branch/$filePath"
+    }
+
+    fun getRawGithubBaseUrl(githubUrl: String): String {
+        if (!githubUrl.contains("github.com/")) return ""
+        val cleanUrl = githubUrl.trim().removeSuffix("/").removeSuffix(".git")
+        val parts = cleanUrl.split("github.com/")
+        if (parts.size < 2) return ""
+        val path = parts[1]
+        val segments = path.split("/").filter { it.isNotEmpty() }
+        if (segments.size < 2) return ""
+        val owner = segments[0]
+        val repo = segments[1]
+        
+        var branch = "main"
+        if (segments.size >= 4 && (segments[2] == "blob" || segments[2] == "tree")) {
+            branch = segments[3]
+        }
+        
+        return "https://raw.githubusercontent.com/$owner/$repo/$branch/"
     }
 
     /**

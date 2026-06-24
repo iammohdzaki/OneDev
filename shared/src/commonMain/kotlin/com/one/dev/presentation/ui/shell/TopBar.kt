@@ -23,8 +23,12 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
 import com.one.dev.data.models.PortfolioProfile
 import com.one.dev.navigation.Routes
+import com.one.dev.presentation.ui.components.GithubIcon
 import com.one.dev.presentation.ui.theme.GitGreen
 import com.one.dev.presentation.ui.theme.JetBrainsMono
 import onedev.shared.generated.resources.Res
@@ -94,7 +98,7 @@ fun TopBar(
                         indication = null
                     ) {
                         try {
-                            uriHandler.openUri(profile.github)
+                            uriHandler.openUri(profile.repoUrl)
                         } catch (e: Exception) {
                         }
                     },
@@ -134,19 +138,46 @@ private fun NavTab(
     val primaryColor = MaterialTheme.colorScheme.primary // #00F0FF (Neon Cyan)
     val neutralBg = MaterialTheme.colorScheme.background // #0C0E10
 
+    val interactionSource = remember { MutableInteractionSource() }
+    val isHovered by interactionSource.collectIsHoveredAsState()
+
+    // Expressive Hover animations
+    val translationY by animateFloatAsState(
+        targetValue = if (isHovered) -2f else 0f,
+        animationSpec = tween(150),
+        label = "translateY"
+    )
+    val scale by animateFloatAsState(
+        targetValue = if (isHovered) 1.04f else 1.0f,
+        animationSpec = tween(150),
+        label = "scale"
+    )
+
     val textColor = if (isActive) neutralBg else primaryColor
-    val backgroundColor = if (isActive) primaryColor else Color.Transparent
-    val borderStroke = if (isActive) null else BorderStroke(1.dp, primaryColor.copy(alpha = 0.8f))
+    val backgroundColor = when {
+        isActive -> primaryColor
+        isHovered -> primaryColor.copy(alpha = 0.15f)
+        else -> Color.Transparent
+    }
+    
+    val borderAlpha = if (isHovered) 1.0f else 0.8f
+    val borderStroke = if (isActive) null else BorderStroke(1.dp, primaryColor.copy(alpha = borderAlpha))
 
     // Futuristic cut corner shape for a cyberpunk tech feel
     val tabShape = CutCornerShape(topStart = 6.dp, bottomEnd = 6.dp)
 
     Box(
         modifier = modifier
+            .graphicsLayer {
+                this.scaleX = scale
+                this.scaleY = scale
+                this.translationY = translationY * density
+            }
             .clip(tabShape)
             .background(backgroundColor)
             .then(if (borderStroke != null) Modifier.border(borderStroke, tabShape) else Modifier)
-            .clickable { onClick() }
+            .hoverable(interactionSource)
+            .clickable(interactionSource = interactionSource, indication = null) { onClick() }
             .padding(horizontal = 18.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -298,42 +329,3 @@ fun BottomStatusBar(
         }
     }
 }
-
-val GithubIcon: ImageVector
-    get() = ImageVector.Builder(
-        name = "GithubIcon",
-        defaultWidth = 24.dp,
-        defaultHeight = 24.dp,
-        viewportWidth = 24f,
-        viewportHeight = 24f
-    ).path(
-        fill = SolidColor(Color.White)
-    ) {
-        moveTo(12.0f, 2.0f)
-        curveTo(6.477f, 2.0f, 2.0f, 6.484f, 2.0f, 12.017f)
-        curveTo(2.0f, 16.446f, 4.87f, 20.199f, 8.852f, 21.528f)
-        curveTo(9.352f, 21.622f, 9.534f, 21.312f, 9.534f, 21.046f)
-        curveTo(9.534f, 20.812f, 9.525f, 20.192f, 9.52f, 19.367f)
-        curveTo(6.738f, 19.972f, 6.15f, 18.03f, 6.15f, 18.03f)
-        curveTo(5.696f, 16.877f, 5.038f, 16.57f, 5.038f, 16.57f)
-        curveTo(4.13f, 15.946f, 5.107f, 15.958f, 5.107f, 15.958f)
-        curveTo(6.111f, 16.029f, 6.64f, 16.992f, 6.64f, 16.992f)
-        curveTo(7.533f, 18.527f, 8.984f, 18.082f, 9.554f, 17.828f)
-        curveTo(9.645f, 17.178f, 9.905f, 16.737f, 10.192f, 16.485f)
-        curveTo(7.971f, 16.231f, 5.636f, 15.369f, 5.636f, 11.517f)
-        curveTo(5.636f, 10.42f, 6.026f, 9.522f, 6.663f, 8.82f)
-        curveTo(6.56f, 8.565f, 6.218f, 7.544f, 6.762f, 6.162f)
-        curveTo(6.762f, 6.162f, 7.604f, 5.891f, 9.516f, 7.19f)
-        curveTo(10.317f, 6.966f, 11.173f, 6.854f, 12.022f, 6.85f)
-        curveTo(12.87f, 6.854f, 13.727f, 6.966f, 14.53f, 7.19f)
-        curveTo(16.44f, 5.891f, 17.28f, 6.162f, 17.28f, 6.162f)
-        curveTo(17.826f, 7.544f, 17.483f, 8.565f, 17.382f, 8.82f)
-        curveTo(18.021f, 9.522f, 18.407f, 10.42f, 18.407f, 11.517f)
-        curveTo(18.407f, 15.378f, 16.07f, 16.228f, 13.842f, 16.477f)
-        curveTo(14.2f, 16.786f, 14.518f, 17.399f, 14.518f, 18.336f)
-        curveTo(14.518f, 19.679f, 14.507f, 20.763f, 14.507f, 21.046f)
-        curveTo(14.507f, 21.315f, 14.685f, 21.628f, 15.195f, 21.528f)
-        curveTo(19.173f, 20.194f, 22.0f, 16.443f, 22.0f, 12.017f)
-        curveTo(22.0f, 6.484f, 17.522f, 2.0f, 12.0f, 2.0f)
-        close()
-    }.build()

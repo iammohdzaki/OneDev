@@ -263,18 +263,22 @@ fun ProjectsScreen(
                                 Spacer(Modifier.height(Dimens.xs))
                                 
                                 BoxWithConstraints(Modifier.fillMaxWidth()) {
-                                    val isWide = maxWidth > 700.dp
-                                    if (isWide) {
-                                        // 4-column layout on wide screens to make cards narrower and match heights
-                                        val columns = 4
-                                        val quartets = projectsInGroup.chunked(columns)
+                                    val columns = when {
+                                        maxWidth > 1200.dp -> 4
+                                        maxWidth > 850.dp -> 3
+                                        maxWidth > 550.dp -> 2
+                                        else -> 1
+                                    }
+                                    
+                                    if (columns > 1) {
+                                        val rows = projectsInGroup.chunked(columns)
                                         Column(verticalArrangement = Arrangement.spacedBy(Dimens.md)) {
-                                            quartets.forEach { quartet ->
+                                            rows.forEach { rowItems ->
                                                 Row(
                                                     modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),
                                                     horizontalArrangement = Arrangement.spacedBy(Dimens.md)
                                                 ) {
-                                                    quartet.forEach { p ->
+                                                    rowItems.forEach { p ->
                                                         TerminalProjectCard(
                                                             project = p,
                                                             modifier = Modifier.weight(1f).fillMaxHeight(),
@@ -283,7 +287,7 @@ fun ProjectsScreen(
                                                             onClick = { onNavigateTo(Routes.ProjectDetails(p.id)) }
                                                         )
                                                     }
-                                                    repeat(columns - quartet.size) {
+                                                    repeat(columns - rowItems.size) {
                                                         Spacer(Modifier.weight(1f))
                                                     }
                                                 }

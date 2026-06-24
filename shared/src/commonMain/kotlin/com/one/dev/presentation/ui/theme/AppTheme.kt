@@ -3,6 +3,7 @@ package com.one.dev.presentation.ui.theme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalFontFamilyResolver
 
 // ── Dynamic theme hook ─────────────────────────────────────────────────────────
 // Exposes a MutableState<ColorScheme> via CompositionLocal so that an external
@@ -17,6 +18,16 @@ fun AppTheme(
     content: @Composable () -> Unit,
 ) {
     val colorSchemeState = remember { mutableStateOf(initialColorScheme) }
+    val emojiFontFamily = NotoEmoji
+    val fontFamilyResolver = LocalFontFamilyResolver.current
+
+    LaunchedEffect(fontFamilyResolver, emojiFontFamily) {
+        try {
+            fontFamilyResolver.preload(emojiFontFamily)
+        } catch (e: Exception) {
+            println("Failed to preload NotoEmoji: ${e.message}")
+        }
+    }
 
     CompositionLocalProvider(LocalAppColorScheme provides colorSchemeState) {
         MaterialTheme(

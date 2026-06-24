@@ -46,6 +46,9 @@ kotlin {
 
             // Material Icons Extended (needed for NavDock, StatusBar, ProjectCard)
             implementation(compose.materialIconsExtended)
+            
+            // Custom Markdown Renderer Module
+            implementation(project(":markdown-renderer"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

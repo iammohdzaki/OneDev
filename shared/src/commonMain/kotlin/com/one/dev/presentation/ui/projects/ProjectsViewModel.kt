@@ -18,7 +18,7 @@ class ProjectsViewModel : BaseViewModel<ProjectsContract.State, ProjectsContract
             is ProjectsContract.Event.FilterByType    -> applyTypeFilter(event.type)
             is ProjectsContract.Event.FilterByGroup   -> applyGroupFilter(event.group)
             is ProjectsContract.Event.FilterByTag     -> applyTagFilter(event.tag)
-            is ProjectsContract.Event.ProjectClicked  -> sendEffect { ProjectsContract.Effect.OpenUrl(event.project.repoUrl) }
+            is ProjectsContract.Event.ProjectClicked  -> sendEffect { ProjectsContract.Effect.OpenUrl(event.project.githubUrl) }
             is ProjectsContract.Event.DemoClicked     -> event.project.demoUrl?.let { url -> sendEffect { ProjectsContract.Effect.OpenUrl(url) } }
         }
     }

@@ -32,3 +32,4 @@ dependencyResolutionManagement {
 
 include(":shared")
 include(":webApp")
+include(":markdown-renderer")

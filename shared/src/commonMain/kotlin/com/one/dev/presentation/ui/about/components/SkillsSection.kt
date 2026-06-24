@@ -85,12 +85,20 @@ fun SkillsSection(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(Dimens.sm)
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Terminal,
-                            contentDescription = null,
-                            tint = GitGreen,
-                            modifier = Modifier.size(16.dp)
-                        )
+                        if (p.emoji.isNotEmpty()) {
+                            Text(
+                                text = p.emoji,
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.width(24.dp)
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Rounded.Terminal,
+                                contentDescription = null,
+                                tint = GitGreen,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
                         Text(
                             text = buildAnnotatedString {
                                 val boldIdx = p.text.indexOf(p.bold)

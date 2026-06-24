@@ -22,12 +22,14 @@ data class PortfolioProject(
     val type: ProjectType,
     val status: ProjectStatus = ProjectStatus.ACTIVE,
     val techStack: List<String> = emptyList(),
-    val repoUrl: String = "",
+    val githubUrl: String = "",
     val demoUrl: String? = null,
     val stars: Int = 0,
     val featured: Boolean = false,
     val currentWork: String? = null,
     val details: String = "",
+    val isPublic: Boolean = false,
+    val buttonText: String? = null
 )
 
 data class PortfolioProfile(
@@ -97,17 +99,18 @@ data class ProjectDto(
     val title: String,
     val description: String,
     val releaseStatus: Int,
-    val isPinned: Boolean,
     val tags: List<String>,
     val type: String,
     val projectUrl: String,
-    val repoUrl: String,
-    val details: String,
-    val stars: Int = 0,
+    val githubUrl: String = "",
+    val details: String = "",
     val group: String,
+    val isPinned: Boolean = false,
+    val stars: Int = 0,
     val groupEmoji: String? = null,
-    val category: String,
-    val currentWork: String? = null
+    val category: String = "Project",
+    val currentWork: String? = null,
+    val buttonText: String? = null
 )
 
 // ── Mapper Extensions ─────────────────────────────────────────────────────────
@@ -157,12 +160,14 @@ fun ProjectDto.toDomain(): PortfolioProject {
         type = typeDomain,
         status = statusEnum,
         techStack = tags,
-        repoUrl = repoUrl,
+        githubUrl = githubUrl,
         demoUrl = if (projectUrl.isNotEmpty()) projectUrl else null,
         stars = stars,
         featured = isPinned,
         currentWork = currentWork,
-        details = details
+        details = details,
+        isPublic = type.equals("public", ignoreCase = true),
+        buttonText = buttonText
     )
 }
 

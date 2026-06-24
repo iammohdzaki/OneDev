@@ -90,7 +90,7 @@
   ],
   "philosophy": [
     {
-      "emoji": "⚡",
+      "emoji": "✅",
       "text": "Prioritize Maintainability over clever hacks.",
       "bold": "Maintainability"
     },

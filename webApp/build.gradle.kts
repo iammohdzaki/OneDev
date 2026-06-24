@@ -21,8 +21,18 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared)
-
             implementation(libs.compose.ui)
+        }
+
+        // Intermediate source set shared by both JS and WasmJS browser targets
+        val webMain by creating {
+            dependsOn(commonMain.get())
+        }
+        val jsMain by getting {
+            dependsOn(webMain)
+        }
+        val wasmJsMain by getting {
+            dependsOn(webMain)
         }
     }
 }

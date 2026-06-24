@@ -25,7 +25,7 @@
     <string name="technologies_label">Technologies:</string>
     <string name="links_label">Links:</string>
     <string name="github_code_btn">GitHub Code</string>
-    <string name="live_demo_btn">Live Demo</string>
+    <string name="live_demo_btn">Check it out</string>
     <string name="tab_me">Me</string>
     <string name="tab_projects">Projects</string>
 </resources>

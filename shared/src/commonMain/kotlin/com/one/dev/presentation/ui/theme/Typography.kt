@@ -9,6 +9,14 @@ import androidx.compose.ui.unit.sp
 import onedev.shared.generated.resources.*
 import org.jetbrains.compose.resources.Font
 
+// Packaged Noto Color Emoji font resource (fallback for emoji glyphs on all targets)
+// Required for Compose WasmJS/Web — Skia reads registered FontFamily, not CSS fonts.
+val NotoEmoji: FontFamily
+    @Composable
+    get() = FontFamily(
+        Font(Res.font.noto_color_emoji, FontWeight.Normal)
+    )
+
 // ── Font families ──────────────────────────────────────────────────────────────
 val GoogleSans: FontFamily
     @Composable
@@ -16,7 +24,9 @@ val GoogleSans: FontFamily
         Font(Res.font.sans_thin, FontWeight.Thin),
         Font(Res.font.sans_regular, FontWeight.Normal),
         Font(Res.font.sans_medium, FontWeight.Medium),
-        Font(Res.font.sans_bold, FontWeight.Bold)
+        Font(Res.font.sans_bold, FontWeight.Bold),
+        // Emoji fallback — Skia will fall through to this for any missing glyph
+        Font(Res.font.noto_color_emoji, FontWeight.Normal)
     )
 
 // Packaged JetBrains Mono font resource
@@ -24,7 +34,8 @@ val JetBrainsMono: FontFamily
     @Composable
     get() = FontFamily(
         Font(Res.font.jetbrains_mono_regular, FontWeight.Normal),
-        Font(Res.font.jetbrains_mono_bold, FontWeight.Bold)
+        Font(Res.font.jetbrains_mono_bold, FontWeight.Bold),
+        Font(Res.font.noto_color_emoji, FontWeight.Normal)
     )
 
 // ── App Typography ─────────────────────────────────────────────────────────────

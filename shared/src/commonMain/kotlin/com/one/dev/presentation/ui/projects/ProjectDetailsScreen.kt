@@ -74,13 +74,19 @@ fun ProjectDetailsScreen(
     var markdownContent by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
+    val basePath = remember(project) {
+        val repo = project?.githubUrl ?: ""
+        if (repo.isNotEmpty()) LocalPortfolioRepository.getRawGithubBaseUrl(repo) else ""
+    }
+
+
     LaunchedEffect(projectId) {
         isLoading = true
         val projects = LocalPortfolioRepository.getProjects()
         val foundProject = projects.firstOrNull { it.id == projectId }
         project = foundProject
         if (foundProject != null) {
-            markdownContent = LocalPortfolioRepository.getProjectDetailsMarkdown(foundProject.details)
+            markdownContent = LocalPortfolioRepository.getProjectDetailsMarkdown(foundProject)
         }
         isLoading = false
     }
@@ -156,22 +162,6 @@ fun ProjectDetailsScreen(
 
                 Spacer(Modifier.height(Dimens.lg))
 
-                // ── Title & Tags ───────────────────────────────────────────
-                Text(
-                    text = p.title,
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Spacer(Modifier.height(Dimens.xs))
-                Text(
-                    text = p.description,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Spacer(Modifier.height(Dimens.xl))
-
                 // ── Responsive Layout ────────────────────────────────────────
                 BoxWithConstraints(Modifier.fillMaxWidth()) {
                     val isWide = maxWidth > 800.dp
@@ -181,7 +171,7 @@ fun ProjectDetailsScreen(
                             horizontalArrangement = Arrangement.spacedBy(Dimens.xl)
                         ) {
                             Box(Modifier.weight(2f)) {
-                                MarkdownSection(markdownContent ?: "")
+                                MarkdownSection(markdownContent ?: "", basePath = basePath, repoUrl = p.githubUrl)
                             }
                             Box(Modifier.weight(1f)) {
                                 ProjectMetadataCard(project = p)
@@ -193,7 +183,7 @@ fun ProjectDetailsScreen(
                             verticalArrangement = Arrangement.spacedBy(Dimens.xl)
                         ) {
                             ProjectMetadataCard(project = p)
-                            MarkdownSection(markdownContent ?: "")
+                            MarkdownSection(markdownContent ?: "", basePath = basePath, repoUrl = p.githubUrl)
                         }
                     }
                 }
@@ -203,7 +193,7 @@ fun ProjectDetailsScreen(
 }
 
 @Composable
-private fun MarkdownSection(markdownText: String) {
+private fun MarkdownSection(markdownText: String, basePath: String, repoUrl: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -212,7 +202,7 @@ private fun MarkdownSection(markdownText: String) {
             .border(1.dp, Color.White.copy(alpha = 0.03f), RoundedCornerShape(12.dp))
             .padding(24.dp)
     ) {
-        MarkdownRenderer(markdownText = markdownText)
+        MarkdownRenderer(markdownText = markdownText, basePath = basePath, repoUrl = repoUrl)
     }
 }
 
@@ -233,6 +223,28 @@ private fun ProjectMetadataCard(
             .padding(24.dp)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            // Title & Description
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = project.title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = project.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Color.White.copy(alpha = 0.05f))
+            )
+
             // Header
             Text(
                 text = stringResource(Res.string.metadata_label),
@@ -335,41 +347,46 @@ private fun ProjectMetadataCard(
             }
 
             // Links Section
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = stringResource(Res.string.links_label),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                
-                OutlinedButton(
-                    onClick = { try { uriHandler.openUri(project.repoUrl) } catch (e: Exception) {} },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.OpenInNew,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
+            val hasLinks = (project.isPublic && project.githubUrl.isNotEmpty()) || project.demoUrl != null
+            if (hasLinks) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = stringResource(Res.string.links_label),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(Res.string.github_code_btn))
-                }
+                    
+                    if (project.isPublic && project.githubUrl.isNotEmpty()) {
+                        OutlinedButton(
+                            onClick = { try { uriHandler.openUri(project.githubUrl) } catch (e: Exception) {} },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.OpenInNew,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(stringResource(Res.string.github_code_btn))
+                        }
+                    }
 
-                project.demoUrl?.let { demo ->
-                    Button(
-                        onClick = { try { uriHandler.openUri(demo) } catch (e: Exception) {} },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = GitBlue)
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.Launch,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(Res.string.live_demo_btn))
+                    project.demoUrl?.let { demo ->
+                        Button(
+                            onClick = { try { uriHandler.openUri(demo) } catch (e: Exception) {} },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = GitBlue)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.Launch,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(project.buttonText ?: stringResource(Res.string.live_demo_btn))
+                        }
                     }
                 }
             }

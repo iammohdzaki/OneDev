@@ -139,24 +139,6 @@ fun TerminalProjectCard(
                                 )
                             }
                         }
-                        if (project.demoUrl != null && onOpenDemo != null) {
-                            Icon(
-                                imageVector = Icons.Rounded.PlayArrow,
-                                contentDescription = "Open Demo",
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .clickable { onOpenDemo() }
-                            )
-                        }
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.OpenInNew,
-                            contentDescription = "Open Repository",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier
-                                    .size(16.dp)
-                                    .clickable { onOpenRepo() }
-                        )
                     }
                 }
 
