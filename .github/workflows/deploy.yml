@@ -26,7 +26,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build WasmJs Production Distribution
-        run: ./gradlew :webApp:wasmJsBrowserProductionExecutableDistribution --no-daemon
+        run: ./gradlew :webApp:wasmJsBrowserDistribution --no-daemon
 
       - name: Optimize Assets with Gzip Compression
         run: |
