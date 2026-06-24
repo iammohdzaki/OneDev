@@ -1,0 +1,113 @@
+{
+  "name": "Mohammad Zaki",
+  "tagline": "Building cross-platform tools that devs love.",
+  "bio": "KMP / Android engineer obsessed with DX and beautiful UIs. Creator of StudyAI and OneManage.",
+  "skills": ["Kotlin", "KMP", "Compose", "Android", "Ktor", "Koin", "MVI"],
+  "stats": {
+    "yearsExperience": 6,
+    "projectsBuilt": 20,
+    "articlesWritten": 0,
+    "commitsThisYear": "200+"
+  },
+  "repoUrl": "https://github.com/iammohdzaki/OneDev",
+  "repoLabel": "github.com/iammohdzaki/OneDev",
+  "cvUrl": "resume.pdf",
+  "discordUrl": "https://discord.com/users/zakwashere",
+  "socials": [
+    {
+      "label": "Github",
+      "url": "https://github.com/iammohdzaki"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://linkedin.com/in/mohammad.zaki"
+    },
+    {
+      "label": "Email",
+      "url": "mohdzaki407@gmail.com"
+    }
+  ],
+  "skillBars": [
+    {
+      "name": "Kotlin / Multiplatform",
+      "percentage": 95.0
+    },
+    {
+      "name": "Jetpack Compose",
+      "percentage": 76.0
+    },
+    {
+      "name": "Android Framework",
+      "percentage": 95.0
+    },
+    {
+      "name": "Ktor Server",
+      "percentage": 95.0
+    },
+    {
+      "name": "AI Agents",
+      "percentage": 70
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Senior Software Engineer",
+      "company": "Global Logic",
+      "role": "Platform Core Team",
+      "period": "2023 — Present",
+      "description": "Led the decoupling of a monolithic codebase into feature-specific modules, enabling parallel development streams and improving build times for the core team.",
+      "highlights": [
+        "Engineered a high-performance Card Scanning module for a major telecom application, utilizing optimized image processing to boost scanning success rates by 124% (from 33% to 74%).",
+        "Spearheaded the migration of the data layer from GSON to Kotlinx Serialization, achieving a 20% increase in parsing speed and significantly reducing memory overhead.",
+        "Optimized application startup time by profiling bottlenecks and integrating the Jetpack App Startup library, resulting in a seamless cold-start experience.",
+        "Recognized with a Certificate of Appreciation (Feb 2025) for exceptional delivery and innovation in core architecture optimization"
+      ]
+    },
+    {
+      "title": "Senior Android Developer",
+      "company": "AppyHigh LLC",
+      "role": "Product Engineer",
+      "period": "2022 — 2023",
+      "description": "Developed and maintained several apps improving app sizes, crash rates and server million of users.",
+      "highlights": [
+        "Orchestrated a comprehensive refactoring of the Instore app (2M+ downloads), utilizing R8/ProGuard optimization to reduce APK size by 75% (80MB to 20MB), driving higher install conversions.",
+        "Maintained product stability for millions of users by establishing quality gates, achieving a 99.9% crash-free rate via Firebase Crashlytics monitoring",
+        "Designed and implemented a serverless “Refer and Earn” reward system, leveraging local logic to eliminate backend costs while increasing user retention.",
+        "Revamped the UI/UX for the Collage Maker app (50k+ downloads), implementing dynamic layouts and custom views to improve user engagement",
+        "Mentored junior developers on Android best practices, code reviews, and architectural patterns (MVVM/Clean Architecture)."
+      ]
+    },
+    {
+      "title": "Software Engineer",
+      "company": "JungleWorks",
+      "role": "Product Engineer",
+      "period": "2019 — 2022",
+      "description": "Developed critical features for the Mr. Delivery and Logistech suites, including multi-merchant carts, payment gateway integrations (Stripe, HyperPay), and real-time driver tracking.",
+      "highlights": [
+        "Awarded Employee of the Month for demonstrating ownership and delivering critical features ahead of schedule"
+      ]
+    }
+  ],
+  "philosophy": [
+    {
+      "emoji": "✅",
+      "text": "Prioritize Maintainability over clever hacks.",
+      "bold": "Maintainability"
+    },
+    {
+      "emoji": "✅",
+      "text": "Performance is a Feature, not a polish step.",
+      "bold": "Feature"
+    },
+    {
+      "emoji": "🔷",
+      "text": "UI logic belongs in Domain-Driven states.",
+      "bold": "Domain-Driven"
+    },
+    {
+      "emoji": "🔷",
+      "text": "Build Scalable Architecture at start, will help in long run.",
+      "bold": "Scalable Architecture"
+    }
+  ]
+}

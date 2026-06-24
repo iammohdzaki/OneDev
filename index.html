@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mohammad Zaki — KMP / Android engineer.">
+    <title>OneDev | Mohammad Zaki</title>
+
+    <!-- Google Fonts: Google Sans + JetBrains Mono + Noto Color Emoji -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols Rounded -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="styles.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%; height: 100%;
+            background: #0C0E10;
+            overflow: hidden;
+            /* Google Sans as default — Compose SansSerif maps to this */
+            font-family: 'Google Sans', 'Google Sans Display', 'Noto Color Emoji', sans-serif;
+        }
+        #compose-app { width: 100%; height: 100%; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333537; border-radius: 10px; }
+
+        /* Loading overlay */
+        #loader {
+            position: fixed; inset: 0;
+            background: #0C0E10;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 20px;
+            z-index: 9999;
+            transition: opacity 0.6s ease;
+        }
+        #loader.hidden { opacity: 0; pointer-events: none; }
+        .loader-brand {
+            font-family: 'Google Sans Display', 'Google Sans', sans-serif;
+            font-size: 13px; font-weight: 700;
+            color: #00F0FF; letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .loader-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px; color: #8b919b;
+        }
+        .dots { display: flex; gap: 8px; }
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%; background: #00F0FF;
+            animation: bounce 1.2s infinite ease-in-out;
+        }
+        .dot:nth-child(2) { animation-delay: 0.2s; background: #ADFF2F; }
+        .dot:nth-child(3) { animation-delay: 0.4s; background: #FF007F; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            40%            { transform: scale(1.0); opacity: 1.0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <div class="loader-brand">ONEDEV</div>
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loader-sub">$ ./portfolio.sh --load-wasm</div>
+    </div>
+
+    <div id="compose-app" style="width: 100%; height: 100%;"></div>
+    <script type="application/javascript" src="webApp.js"></script>
+
+    <script>
+        console.log("[imgBridge] Loaded index.html script successfully");
+
+        (function() {
+            const loader = document.getElementById('loader');
+            const observer = new MutationObserver(function() {
+                const canvas = document.querySelector('canvas');
+                if (canvas) {
+                    setTimeout(function() { loader.classList.add('hidden'); }, 400);
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.getElementById('compose-app'), { childList: true, subtree: true });
+            setTimeout(function() { loader.classList.add('hidden'); }, 8000);
+        })();
+
+        window.renderMermaid = async function(text, elementId) {
+            if (typeof mermaid === 'undefined') {
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js';
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error('Failed to load mermaid from CDN'));
+                    document.head.appendChild(script);
+                });
+                mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+            }
+            const { svg } = await mermaid.render(elementId + "_svg", text);
+            return svg;
+        };
+
+        // ─────────────────────────────────────────────────────────────
+        // Core image loading helpers
+        // ─────────────────────────────────────────────────────────────
+
+        // Convert a canvas to base64 PNG string
+        function canvasToBase64(canvas) {
+            return new Promise((resolve, reject) => {
+                canvas.toBlob(blob => {
+                    if (!blob) { reject(new Error('canvas.toBlob returned null')); return; }
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror   = () => reject(new Error('FileReader error'));
+                    reader.readAsDataURL(blob);
+                }, 'image/png');
+            });
+        }
+
+        // Load an image URL into a native <img> element and draw to canvas.
+        // Uses crossOrigin='anonymous' so canvas stays untainted (works when server has CORS headers).
+        function loadImageToCanvas(url, targetW, targetH) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = async () => {
+                    const w = targetW || img.naturalWidth  || 200;
+                    const h = targetH || img.naturalHeight || 28;
+                    const canvas = document.createElement('canvas');
+                    canvas.width  = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    try {
+                        const b64 = await canvasToBase64(canvas);
+                        resolve(b64);
+                    } catch(e) { reject(e); }
+                };
+                img.onerror = () => reject(new Error('Image load failed: ' + url));
+                img.src = url;
+            });
+        }
+
+        // Parse SVG text and extract intrinsic dimensions
+        function parseSvgDimensions(svgText) {
+            const parser = new DOMParser();
+            const doc    = parser.parseFromString(svgText, 'image/svg+xml');
+            const svgEl  = doc.querySelector('svg');
+            if (!svgEl) return { width: 200, height: 28, svgEl: null };
+
+            let w = parseFloat(svgEl.getAttribute('width'))  || 0;
+            let h = parseFloat(svgEl.getAttribute('height')) || 0;
+
+            const vb = svgEl.getAttribute('viewBox');
+            if (vb) {
+                const parts = vb.trim().split(/[\s,]+/).map(parseFloat);
+                if (parts.length >= 4) {
+                    if (!w || isNaN(w)) w = parts[2];
+                    if (!h || isNaN(h)) h = parts[3];
+                }
+            }
+            if (!w || isNaN(w)) w = 200;
+            if (!h || isNaN(h)) h = 28;
+            // Handle 'pt' units
+            const wStr = svgEl.getAttribute('width')  || '';
+            const hStr = svgEl.getAttribute('height') || '';
+            if (wStr.includes('pt')) w *= 1.33;
+            if (hStr.includes('pt')) h *= 1.33;
+
+            return { width: w, height: h, svgEl };
+        }
+
+        // Render SVG text string to PNG base64 at 2× scale
+        async function svgTextToPng(svgText) {
+            const { width, height, svgEl } = parseSvgDimensions(svgText);
+            if (!svgEl) throw new Error('Invalid SVG');
+
+            const scale = 2;
+            const rw = Math.ceil(width  * scale);
+            const rh = Math.ceil(height * scale);
+
+            // Stamp explicit pixel dimensions + preserve viewBox for scaling
+            if (!svgEl.getAttribute('viewBox')) {
+                svgEl.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            }
+            svgEl.setAttribute('width',  rw);
+            svgEl.setAttribute('height', rh);
+            // Remove percentage-based dimensions that confuse the img element
+            svgEl.removeAttribute('style');
+
+            const serial  = new XMLSerializer();
+            const clean   = serial.serializeToString(svgEl);
+            const blob    = new Blob([clean], { type: 'image/svg+xml;charset=utf-8' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                // NOTE: no crossOrigin needed for blob URLs
+                img.onload = async () => {
+                    URL.revokeObjectURL(blobUrl);
+                    const canvas = document.createElement('canvas');
+                    canvas.width  = rw;
+                    canvas.height = rh;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, rw, rh);
+                    try { resolve(await canvasToBase64(canvas)); }
+                    catch(e) { reject(e); }
+                };
+                img.onerror = () => {
+                    URL.revokeObjectURL(blobUrl);
+                    reject(new Error('SVG blob load failed'));
+                };
+                img.src = blobUrl;
+            });
+        }
+
+        // Fetch via images.weserv.nl proxy to handle CORS and SVG-to-PNG conversion server-side
+        async function fetchViaWeserv(url, isSvg) {
+            let cleanUrl = url.trim();
+            if (cleanUrl.startsWith('//')) {
+                cleanUrl = 'https:' + cleanUrl;
+            }
+            let weservUrl = 'https://images.weserv.nl/?url=' + encodeURIComponent(cleanUrl);
+            if (isSvg) {
+                weservUrl += '&output=png';
+            }
+            const r = await fetch(weservUrl);
+            if (!r.ok) throw new Error('weserv failed: ' + r.status);
+            const blob = await r.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                reader.onerror   = () => reject(new Error('FileReader error'));
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        // Fetch a URL, following redirects. Tries direct first, then a CORS proxy.
+        async function safeFetch(url) {
+            try {
+                const r = await fetch(url, { mode: 'cors' });
+                if (r.ok) return r;
+                throw new Error(r.status + ' ' + r.statusText);
+            } catch (e) {
+                // CORS or network failure — try open proxy
+                const proxied = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                try {
+                    const r2 = await fetch(proxied);
+                    if (r2.ok) return r2;
+                    throw new Error('proxy: ' + r2.status);
+                } catch (e2) {
+                    // Second proxy fallback
+                    const proxied2 = 'https://corsproxy.io/?url=' + encodeURIComponent(url);
+                    const r3 = await fetch(proxied2);
+                    if (r3.ok) return r3;
+                    throw new Error('all fetches failed for ' + url);
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // Public API called from Kotlin/Wasm bridge
+        // ─────────────────────────────────────────────────────────────
+
+        /**
+         * Fetch an SVG URL and return a PNG base64 string.
+         * Strategy:
+         *  1. Try native <img> load (browser handles SVG natively, avoids canvas taint)
+         *  2. Fall back to fetch → parse SVG → blob → canvas
+         *  3. Fall back to Weserv proxy
+         *  4. Fall back to CORS proxy fetch → parse SVG → blob → canvas
+         */
+        window.fetchSvgAsPngBase64 = async function(svgUrl) {
+            console.log('[imgBridge] fetchSvgAsPng:', svgUrl);
+            // Strategy 1: native img load (best — avoids canvas taint for trusted SVGs)
+            try {
+                const b64 = await loadImageToCanvas(svgUrl);
+                console.log('[imgBridge] native load succeeded:', svgUrl);
+                return b64;
+            } catch (e1) {
+                console.warn('[imgBridge] native load failed, trying direct fetch:', e1.message);
+            }
+
+            // Strategy 2: fetch SVG text directly
+            try {
+                const r = await fetch(svgUrl, { mode: 'cors' });
+                if (r.ok) {
+                    const ct = r.headers.get('content-type') || '';
+                    if (ct.includes('png') || ct.includes('jpeg') || ct.includes('gif') || ct.includes('webp')) {
+                        // Server actually returned a raster image
+                        const blob = await r.blob();
+                        return await new Promise((res, rej) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => res(reader.result.split(',')[1]);
+                            reader.onerror   = rej;
+                            reader.readAsDataURL(blob);
+                        });
+                    }
+                    const text = await r.text();
+                    const b64  = await svgTextToPng(text);
+                    console.log('[imgBridge] direct fetch+parse succeeded:', svgUrl);
+                    return b64;
+                }
+            } catch (e2) {
+                console.warn('[imgBridge] direct fetch failed, trying weserv:', e2.message);
+            }
+
+            // Strategy 3: Weserv proxy (SVG to PNG)
+            try {
+                const b64 = await fetchViaWeserv(svgUrl, true);
+                console.log('[imgBridge] weserv proxy succeeded:', svgUrl);
+                return b64;
+            } catch (e3) {
+                console.warn('[imgBridge] weserv proxy failed, trying backup proxies:', e3.message);
+            }
+
+            // Strategy 4: backup proxy fetch
+            try {
+                const r = await safeFetch(svgUrl);
+                const text = await r.text();
+                const b64  = await svgTextToPng(text);
+                console.log('[imgBridge] backup proxy fetch succeeded:', svgUrl);
+                return b64;
+            } catch (e4) {
+                console.error('[imgBridge] all strategies failed for', svgUrl, e4);
+                throw e4;
+            }
+        };
+
+        /**
+         * Fetch a raster image URL and return a PNG base64 string.
+         * Strategy:
+         *  1. Try native <img> load
+         *  2. Fall back to fetch (direct)
+         *  3. Fall back to Weserv proxy
+         *  4. Fall back to backup CORS proxy
+         */
+        window.fetchImageBytesBase64 = async function(imageUrl) {
+            console.log('[imgBridge] fetchImageBytes:', imageUrl);
+            const lower = imageUrl.toLowerCase();
+            const hasRasterExt = lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.webp') || lower.endsWith('.gif');
+            const isSvg = lower.endsWith('.svg') || lower.includes('.svg?') || 
+                          (!hasRasterExt && (lower.includes('badge') || lower.includes('shields.io') || lower.includes('workflow')));
+
+            if (isSvg) {
+                return window.fetchSvgAsPngBase64(imageUrl);
+            }
+
+            // Strategy 1: native img load
+            try {
+                const b64 = await loadImageToCanvas(imageUrl);
+                console.log('[imgBridge] native raster load succeeded:', imageUrl);
+                return b64;
+            } catch (e1) {
+                console.warn('[imgBridge] native raster load failed, trying direct fetch:', e1.message);
+            }
+
+            // Strategy 2: direct fetch
+            try {
+                const r = await fetch(imageUrl, { mode: 'cors' });
+                if (r.ok) {
+                    const ct = r.headers.get('content-type') || '';
+                    if (ct.includes('svg')) {
+                        const text = await r.text();
+                        return await svgTextToPng(text);
+                    }
+                    const blob = await r.blob();
+                    return await new Promise((res, rej) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => res(reader.result.split(',')[1]);
+                        reader.onerror   = rej;
+                        reader.readAsDataURL(blob);
+                    });
+                }
+            } catch (e2) {
+                console.warn('[imgBridge] direct fetch failed, trying weserv:', e2.message);
+            }
+
+            // Strategy 3: Weserv proxy
+            try {
+                const b64 = await fetchViaWeserv(imageUrl, false);
+                console.log('[imgBridge] weserv proxy succeeded:', imageUrl);
+                return b64;
+            } catch (e3) {
+                console.warn('[imgBridge] weserv proxy failed, trying backup proxies:', e3.message);
+            }
+
+            // Strategy 4: backup CORS proxy fetch
+            try {
+                const r  = await safeFetch(imageUrl);
+                const ct = r.headers.get('content-type') || '';
+                if (ct.includes('svg')) {
+                    const text = await r.text();
+                    return await svgTextToPng(text);
+                }
+                const blob = await r.blob();
+                return await new Promise((res, rej) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => res(reader.result.split(',')[1]);
+                    reader.onerror   = rej;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (e4) {
+                console.error('[imgBridge] all strategies failed for', imageUrl, e4);
+                throw e4;
+            }
+        };
+
+        window.showMermaidModal = function(svgHtml) {
+            const existing = document.getElementById("mermaid-modal");
+            if (existing) existing.remove();
+
+            const overlay = document.createElement("div");
+            overlay.id = "mermaid-modal";
+            overlay.style.cssText = "position:fixed;inset:0;background:rgba(13,17,23,0.95);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;overflow:auto;";
+
+            const closeBtn = document.createElement("button");
+            closeBtn.innerText = "✕ Close Diagram";
+            closeBtn.style.cssText = "position:absolute;top:20px;right:20px;padding:10px 20px;font-size:14px;font-family:monospace;color:#E6EDF3;background:#21262D;border:1px solid #30363D;border-radius:6px;cursor:pointer;";
+            closeBtn.onclick = () => overlay.remove();
+            overlay.appendChild(closeBtn);
+
+            const container = document.createElement("div");
+            container.style.cssText = "max-width:90%;max-height:80%;overflow:auto;display:flex;align-items:center;justify-content:center;";
+            container.innerHTML = svgHtml;
+            overlay.appendChild(container);
+
+            document.body.appendChild(overlay);
+        };
+    </script>
+</body>
+</html>

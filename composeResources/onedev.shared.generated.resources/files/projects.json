@@ -1,0 +1,264 @@
+[
+  {
+    "id": "onekore-onedev",
+    "title": "OneDev",
+    "description": "A premium, modern developer portfolio built entirely with Kotlin Multiplatform (KMP) targeting Web/WasmJs. Employs a terminal-inspired, neo-cyberpunk aesthetic using the GitHub Dark color palette.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Web",
+      "Wasm",
+      "Compose"
+    ],
+    "type": "public",
+    "projectUrl": "",
+    "githubUrl": "https://github.com/iammohdzaki/OneDev",
+    "group": "OneKore"
+  },
+  {
+    "id": "onekore-onetask",
+    "title": "OneTask-Desktop",
+    "description": "OneTask is a flexible, block-based workspace application built with Compose Multiplatform. It allows you to organize your thoughts, tasks, and data in a unified environment that feels local-first and high-performance.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Desktop",
+      "Compose"
+    ],
+    "type": "public",
+    "projectUrl": "https://github.com/iammohdzaki/OneTask-Desktop/releases",
+    "githubUrl": "https://github.com/iammohdzaki/OneTask-Desktop",
+    "group": "OneKore"
+  },
+  {
+    "id": "onekore-oneagent",
+    "title": "OneAgent-Desktop",
+    "description": "OneAgent is an experimental privacy-first AI assistant that runs entirely on-device, leveraging local models. By processing data locally, it ensures maximum privacy without relying on cloud servers or sending your data anywhere. It comes with built-in system telemetry, memory context retention, and fluid UI.",
+    "releaseStatus": 0,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Desktop",
+      "Compose",
+      "LLM",
+      "AI"
+    ],
+    "type": "public",
+    "projectUrl": "",
+    "githubUrl": "https://github.com/iammohdzaki/OneAgent-Desktop",
+    "group": "OneKore"
+  },
+  {
+    "id": "onemanage-server",
+    "title": "OneManage-Server",
+    "description": "One Log is a centralized logging SaaS platform designed to ingest, store, and manage logs from various sources (Android, iOS, Server, Web) in a unified manner. It provides a secure and scalable way to handle application logs with multi-tenancy support.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "Ktor",
+      "Server",
+      "Developer"
+    ],
+    "type": "private",
+    "details": "onemanage_server.md",
+    "projectUrl": "https://onemanage.quest/",
+    "group": "OneManage"
+  },
+  {
+    "id": "onemanage-kmp-sample",
+    "title": "OneManage-KMP-Sample",
+    "description": "This is a sample application showcasing the integration of the OneManage KMP SDK in a Compose Multiplatform project.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Compose",
+      "Developer"
+    ],
+    "type": "public",
+    "projectUrl": "https://github.com/iammohdzaki/onemanage-app-sample",
+    "githubUrl": "https://github.com/iammohdzaki/onemanage-app-sample",
+    "group": "OneManage"
+  },
+  {
+    "id": "onemanage-kmp-sdk",
+    "title": "OneManage-KMP-SDK",
+    "description": "The OneManage SDK is a unified telemetry, bug reporting, and remote configuration SDK built from the ground up for Kotlin Multiplatform. It provides a single API to instrument your app across Android, iOS, and Desktop (JVM) while automatically handling offline-caching, batching, and native hardware metadata.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "SDK",
+      "Developer"
+    ],
+    "type": "private",
+    "details": "onemanage_kmp_sdk.md",
+    "projectUrl": "https://onemanage.quest/docs/sdk",
+    "group": "OneManage"
+  },
+  {
+    "id": "quickpin-android",
+    "title": "Quick-Pin-Android",
+    "description": "Quick Pin lets you pin any file — PDFs, images, documents, and Google Drive files — directly to your Android home screen as a beautiful, fully customizable widget.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "Android",
+      "PlayStore",
+      "Compose"
+    ],
+    "type": "private",
+    "details": "quick_pin_android.md",
+    "projectUrl": "https://play.google.com/store/apps/details?id=com.quick.pin&hl=en_IN",
+    "group": "AndroidApps"
+  },
+  {
+    "id": "studyai-android",
+    "title": "Study-AI-Android",
+    "description": "Turn your topics into smart flashcards, study guides, and explanations powered by AI. Whether you’re preparing for exams, revising classwork, or learning new concepts, Study AI helps you study faster, remember more, and stay organised.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "Android",
+      "PlayStore",
+      "Compose",
+      "AI"
+    ],
+    "type": "private",
+    "details": "study_ai_android.md",
+    "projectUrl": "https://play.google.com/store/apps/details?id=com.zaki.studyai&hl=en_IN",
+    "group": "AndroidApps"
+  },
+  {
+    "id": "plugin-jsonbox",
+    "title": "JsonBox-Intellij-Plugin",
+    "description": "JsonBox is a smart, floating JSON toolbox built into IntelliJ IDEA. It helps developers format, validate, minify, copy, and stringify JSON with ease — all inside the IDE.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "Plugin",
+      "Jetbrains"
+    ],
+    "type": "public",
+    "projectUrl": "https://plugins.jetbrains.com/plugin/27770-jsonbox",
+    "githubUrl": "https://github.com/iammohdzaki/JsonBox-Intellij-Plugin",
+    "group": "Plugins"
+  },
+  {
+    "id": "kmpalette-theme-lib",
+    "title": "KMPalette-Theme-Library",
+    "description": "A Kotlin Multiplatform library for dynamic theme management using Jetpack Compose Multiplatform",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Library",
+      "Compose"
+    ],
+    "type": "public",
+    "projectUrl": "https://central.sonatype.com/artifact/io.github.iammohdzaki.kmpalette/theme-core",
+    "githubUrl": "https://github.com/iammohdzaki/KMPalette-Theme-Library",
+    "group": "Libraries"
+  },
+  {
+    "id": "kmp-skills",
+    "title": "kmp-skills",
+    "description": "Instead of copying and pasting the same prompts into every new project, you install this repo globally into your AI assistant. The AI learns exactly how to structure an AGP 9.0+ project, how to scaffold MVI architecture, how to resolve real library versions, and how to audit your Compose UI for Material 3 compliance.",
+    "releaseStatus": 1,
+    "tags": [
+      "KMP",
+      "AI",
+      "SKILLS",
+      "Developer"
+    ],
+    "type": "public",
+    "githubUrl": "https://github.com/iammohdzaki/kmp-skills",
+    "projectUrl": "https://github.com/iammohdzaki/kmp-skills",
+    "group": "DevTools"
+  },
+  {
+    "id": "bundletool-desktop",
+    "title": "BundleToolUI-Desktop",
+    "description": "AAB to APK Converter is an open-source tool built with Kotlin and Desktop Compose that allows users to convert Android App Bundles (AAB) to Android Package (APK) files using Google's BundleTool.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Desktop",
+      "Compose",
+      "Developer"
+    ],
+    "type": "public",
+    "projectUrl": "https://github.com/iammohdzaki/BundleToolUI-Desktop/releases",
+    "githubUrl": "https://github.com/iammohdzaki/BundleToolUI-Desktop",
+    "group": "DevTools"
+  },
+  {
+    "id": "fixlag-desktop",
+    "title": "FixLag-Desktop",
+    "description": "FixLag is a desktop application designed to reduce latency and jitter in online games like Valorant by routing traffic through optimized WireGuard servers. It features a modern, dark-themed UI built with Compose Multiplatform and communicates with a background Windows Service for secure tunnel management.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Desktop",
+      "Compose",
+      "Windows",
+      "Gaming"
+    ],
+    "type": "public",
+    "projectUrl": "https://github.com/FixLag-WorkSpace/FixLag-Desktop/releases",
+    "githubUrl": "https://github.com/FixLag-WorkSpace/FixLag-Desktop",
+    "group": "FixLag"
+  },
+  {
+    "id": "fixlag-agent",
+    "title": "FixLagAgent-Windows",
+    "description": "A specialized, high-performance Windows Service that intelligently installs, configures, and manages a WireGuard Tunnel.",
+    "releaseStatus": 1,
+    "tags": [
+      "C++",
+      "Windows",
+      "Gaming"
+    ],
+    "type": "public",
+    "projectUrl": "https://github.com/FixLag-WorkSpace/FixLagAgent-Windows",
+    "githubUrl": "https://github.com/FixLag-WorkSpace/FixLagAgent-Windows",
+    "group": "FixLag"
+  },
+  {
+    "id": "jsonbox-webapp",
+    "title": "JsonBox-WebApp",
+    "description": "JsonBox Toolkit is a completely client-side, fast, privacy-focused web application for manipulating, formatting, and interpreting JSON data.",
+    "releaseStatus": 1,
+    "tags": [
+      "JS",
+      "Web",
+      "Developer"
+    ],
+    "type": "private",
+    "projectUrl": "",
+    "githubUrl": "https://jsonbox-toolkit.vercel.app/",
+    "details": "jsonbox_webapp.md",
+    "group": "WebApps"
+  },
+  {
+    "id": "kotlibs-web",
+    "title": "KotLibs",
+    "description": "A Kotlin Multiplatform Libraries Listing Web App built with KMP WebAssembly.",
+    "releaseStatus": 1,
+    "tags": [
+      "Kotlin",
+      "KMP",
+      "Web",
+      "Wasm",
+      "Compose"
+    ],
+    "type": "public",
+    "projectUrl": "https://iammohdzaki.github.io/KotLibs/",
+    "githubUrl": "https://github.com/iammohdzaki/KotLibs",
+    "group": "WebApps"
+  }
+]
