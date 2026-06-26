@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import com.one.dev.presentation.ui.components.NeonVerticalScrollbar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -61,11 +62,12 @@ fun ProjectsScreen(
         state.filteredProjects.groupBy { it.group }
     }
 
+    val scrollState = rememberScrollState()
     Box(modifier = Modifier.fillMaxSize().background(BgPrimary)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(horizontal = Dimens.screenHorizontal)
                 .padding(bottom = Dimens.contentBottomPad),
         ) {
@@ -314,6 +316,12 @@ fun ProjectsScreen(
             }
             Spacer(Modifier.height(Dimens.lg))
         }
+        NeonVerticalScrollbar(
+            scrollState = scrollState,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 4.dp, top = 8.dp, bottom = 8.dp)
+        )
     }
 }
 

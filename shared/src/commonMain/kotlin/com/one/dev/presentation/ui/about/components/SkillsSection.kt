@@ -83,20 +83,18 @@ fun SkillsSection(
                 philosophy.forEach { p ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Dimens.sm)
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.md)
                     ) {
-                        if (p.emoji.isNotEmpty()) {
-                            Text(
-                                text = p.emoji,
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.width(24.dp)
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Rounded.Terminal,
-                                contentDescription = null,
-                                tint = GitGreen,
-                                modifier = Modifier.size(16.dp)
+                        Box(
+                            modifier = Modifier.width(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .clip(CircleShape)
+                                    .border(1.5.dp, MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), CircleShape)
+                                    .background(Color.Transparent)
                             )
                         }
                         Text(

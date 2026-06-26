@@ -214,117 +214,134 @@ fun BottomStatusBar(
 ) {
     val uriHandler = LocalUriHandler.current
 
-    Row(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
             .height(36.dp)
             .background(MaterialTheme.colorScheme.surface)
             .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
-            .padding(horizontal = 24.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        // Left
+        val width = maxWidth
+        val horizontalPad = if (width < 450.dp) 16.dp else 24.dp
+
         Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = horizontalPad),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = "MIT LICENSE",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
-                fontFamily = JetBrainsMono,
-                fontSize = 11.sp
-            )
-            Box(
-                Modifier.size(4.dp).clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
-            )
+            // Left
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                if (width > 650.dp) {
+                    Text(
+                        text = "MIT LICENSE",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                        fontFamily = JetBrainsMono,
+                        fontSize = 11.sp
+                    )
+                    Box(
+                        Modifier.size(4.dp).clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+                    )
+                }
 
-            val gitInteractionSource = remember { MutableInteractionSource() }
-            val isGitHovered by gitInteractionSource.collectIsHoveredAsState()
-            Text(
-                text = profile.repoLabel.ifEmpty { "github.com/mohdzaki/OneDev" },
-                style = MaterialTheme.typography.labelSmall.copy(
-                    textDecoration = if (isGitHovered) androidx.compose.ui.text.style.TextDecoration.Underline else null
-                ),
-                color = if (isGitHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                    alpha = 0.8f
-                ),
-                fontFamily = JetBrainsMono,
-                fontSize = 11.sp,
-                modifier = Modifier
-                    .hoverable(gitInteractionSource)
-                    .clickable(interactionSource = gitInteractionSource, indication = null) {
-                        try {
-                            uriHandler.openUri(profile.repoUrl.ifEmpty { "https://github.com/mohdzaki/OneDev" })
-                        } catch (e: Exception) {
-                        }
-                    }
-            )
-
-            Box(
-                Modifier.size(4.dp).clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
-            )
-
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Box(Modifier.size(6.dp).clip(CircleShape).background(GitGreen))
-                Text(
-                    "Branch: main*",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = GitGreen,
-                    fontFamily = JetBrainsMono,
-                    fontSize = 11.sp
-                )
-            }
-        }
-
-        // Right
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            val socialLinks = profile.socials.ifEmpty {
-                listOf(
-                    com.one.dev.data.models.SocialLink("Github", "https://github.com/iammohdzaki"),
-                    com.one.dev.data.models.SocialLink("LinkedIn", "https://linkedin.com/in/mohammad.zaki")
-                )
-            }
-
-            socialLinks.forEach { link ->
-                val interactionSource = remember { MutableInteractionSource() }
-                val isHovered by interactionSource.collectIsHoveredAsState()
-                Text(
-                    text = link.label,
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        textDecoration = if (isHovered) androidx.compose.ui.text.style.TextDecoration.Underline else null
-                    ),
-                    color = if (isHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                        0.6f
-                    ),
-                    fontFamily = JetBrainsMono,
-                    fontSize = 11.sp,
-                    modifier = Modifier
-                        .hoverable(interactionSource)
-                        .clickable(interactionSource = interactionSource, indication = null) {
-                            try {
-                                uriHandler.openUri(link.url)
-                            } catch (e: Exception) {
+                if (width > 450.dp) {
+                    val gitInteractionSource = remember { MutableInteractionSource() }
+                    val isGitHovered by gitInteractionSource.collectIsHoveredAsState()
+                    Text(
+                        text = profile.repoLabel.ifEmpty { "github.com/mohdzaki/OneDev" },
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            textDecoration = if (isGitHovered) androidx.compose.ui.text.style.TextDecoration.Underline else null
+                        ),
+                        color = if (isGitHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                            alpha = 0.8f
+                        ),
+                        fontFamily = JetBrainsMono,
+                        fontSize = 11.sp,
+                        maxLines = 1,
+                        modifier = Modifier
+                            .hoverable(gitInteractionSource)
+                            .clickable(interactionSource = gitInteractionSource, indication = null) {
+                                try {
+                                    uriHandler.openUri(profile.repoUrl.ifEmpty { "https://github.com/mohdzaki/OneDev" })
+                                } catch (e: Exception) {
+                                }
                             }
-                        }
-                )
+                    )
+                    Box(
+                        Modifier.size(4.dp).clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(Modifier.size(6.dp).clip(CircleShape).background(GitGreen))
+                    Text(
+                        "Branch: main*",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = GitGreen,
+                        fontFamily = JetBrainsMono,
+                        fontSize = 11.sp,
+                        maxLines = 1
+                    )
+                }
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Box(Modifier.size(6.dp).clip(CircleShape).background(GitGreen))
-                Text(
-                    "ONLINE",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = GitGreen,
-                    fontFamily = JetBrainsMono,
-                    fontSize = 11.sp
-                )
+            // Right
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (width > 650.dp) {
+                    val socialLinks = profile.socials.ifEmpty {
+                        listOf(
+                            com.one.dev.data.models.SocialLink("Github", "https://github.com/iammohdzaki"),
+                            com.one.dev.data.models.SocialLink("LinkedIn", "https://linkedin.com/in/mohammad.zaki")
+                        )
+                    }
+
+                    socialLinks.forEach { link ->
+                        val interactionSource = remember { MutableInteractionSource() }
+                        val isHovered by interactionSource.collectIsHoveredAsState()
+                        Text(
+                            text = link.label,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                textDecoration = if (isHovered) androidx.compose.ui.text.style.TextDecoration.Underline else null
+                            ),
+                            color = if (isHovered) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                0.6f
+                            ),
+                            fontFamily = JetBrainsMono,
+                            fontSize = 11.sp,
+                            maxLines = 1,
+                            modifier = Modifier
+                                .hoverable(interactionSource)
+                                .clickable(interactionSource = interactionSource, indication = null) {
+                                    try {
+                                        uriHandler.openUri(link.url)
+                                    } catch (e: Exception) {
+                                    }
+                                }
+                        )
+                    }
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(Modifier.size(6.dp).clip(CircleShape).background(GitGreen))
+                    Text(
+                        "ONLINE",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = GitGreen,
+                        fontFamily = JetBrainsMono,
+                        fontSize = 11.sp,
+                        maxLines = 1
+                    )
+                }
             }
         }
     }

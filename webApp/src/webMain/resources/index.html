@@ -6,10 +6,10 @@
     <meta name="description" content="Mohammad Zaki — KMP / Android engineer.">
     <title>OneDev | Mohammad Zaki</title>
 
-    <!-- Google Fonts: Google Sans + JetBrains Mono + Noto Color Emoji -->
+    <!-- Google Fonts: Google Sans + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=JetBrains+Mono:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Material Symbols Rounded -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
@@ -77,10 +77,44 @@
     </div>
 
     <div id="compose-app" style="width: 100%; height: 100%;"></div>
-    <script type="application/javascript" src="webApp.js"></script>
 
     <script>
         console.log("[imgBridge] Loaded index.html script successfully");
+
+        // Service Worker registration & optimized WASM loading
+        function loadApp() {
+            if (window.appLoaded) return;
+            window.appLoaded = true;
+            console.log("[AppLoader] Initializing application...");
+            const script = document.createElement('script');
+            script.type = 'application/javascript';
+            script.src = 'webApp.js';
+            document.body.appendChild(script);
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => {
+                    console.log('[SW] Registered successfully:', reg.scope);
+                    if (navigator.serviceWorker.controller) {
+                        // Already controlled, load application immediately
+                        loadApp();
+                    } else {
+                        // Wait for service worker to activate and control the page
+                        navigator.serviceWorker.addEventListener('controllerchange', () => {
+                            loadApp();
+                        });
+                        // Safe fallback in case activation takes too long (e.g. 1.2s)
+                        setTimeout(loadApp, 1200);
+                    }
+                })
+                .catch(err => {
+                    console.error('[SW] Registration failed:', err);
+                    loadApp();
+                });
+        } else {
+            loadApp();
+        }
 
         (function() {
             const loader = document.getElementById('loader');

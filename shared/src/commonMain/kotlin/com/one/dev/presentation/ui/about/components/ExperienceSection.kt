@@ -27,6 +27,7 @@ import com.one.dev.presentation.ui.theme.JetBrainsMono
 import org.jetbrains.compose.resources.stringResource
 import onedev.shared.generated.resources.*
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ExperienceSection(experiences: List<Experience>, modifier: Modifier = Modifier) {
     Column(modifier) {
@@ -85,12 +86,17 @@ fun ExperienceSection(experiences: List<Experience>, modifier: Modifier = Modifi
                     }
                     Spacer(Modifier.width(Dimens.md))
                     Column(Modifier.weight(1f).padding(bottom = Dimens.xl)) {
-                        Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
+                        FlowRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
                             Text(
                                 text = exp.title,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.padding(end = 8.dp)
                             )
                             Box(
                                 modifier = Modifier
@@ -102,7 +108,9 @@ fun ExperienceSection(experiences: List<Experience>, modifier: Modifier = Modifi
                                     text = exp.period,
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    fontFamily = JetBrainsMono
+                                    fontFamily = JetBrainsMono,
+                                    maxLines = 1,
+                                    softWrap = false
                                 )
                             }
                         }

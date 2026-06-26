@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import com.one.dev.presentation.ui.components.NeonVerticalScrollbar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,11 +28,12 @@ fun AboutScreen() {
     val experience = profile.experiences
     val philosophy = profile.philosophy
 
+    val scrollState = rememberScrollState()
     Box(Modifier.fillMaxSize().background(BgPrimary)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(horizontal = Dimens.screenHorizontal)
                 .padding(bottom = Dimens.contentBottomPad),
         ) {
@@ -99,5 +101,11 @@ fun AboutScreen() {
             }
             Spacer(Modifier.height(Dimens.lg))
         }
+        NeonVerticalScrollbar(
+            scrollState = scrollState,
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 4.dp, top = 8.dp, bottom = 8.dp)
+        )
     }
 }

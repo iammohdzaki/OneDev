@@ -43,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.one.dev.presentation.ui.components.NeonVerticalScrollbar
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -73,6 +74,7 @@ fun ProjectDetailsScreen(
     var project by remember { mutableStateOf<PortfolioProject?>(null) }
     var markdownContent by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
+    val scrollState = rememberScrollState()
 
     val basePath = remember(project) {
         val repo = project?.githubUrl ?: ""
@@ -117,47 +119,56 @@ fun ProjectDetailsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
                     .padding(horizontal = Dimens.screenHorizontal)
                     .padding(bottom = Dimens.contentBottomPad)
             ) {
                 Spacer(Modifier.height(Dimens.xl))
 
                 // ── Back Button & Terminal Prompt ───────────────────────────
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    val showPrompt = maxWidth > 750.dp
                     Row(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .clickable { onBack() }
-                            .padding(horizontal = 8.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = "Back",
-                            tint = GitBlue,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Text(
-                            text = stringResource(Res.string.back_to_gallery),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = GitBlue,
-                            fontFamily = JetBrainsMono,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                        Row(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable { onBack() }
+                                .padding(horizontal = 8.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = "Back",
+                                tint = GitBlue,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = stringResource(Res.string.back_to_gallery),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = GitBlue,
+                                fontFamily = JetBrainsMono,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1
+                            )
+                        }
 
-                    Text(
-                        text = "$ ./view_project.sh --id ${p.id}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = GitGreen.copy(0.7f),
-                        fontFamily = JetBrainsMono
-                    )
+                        if (showPrompt) {
+                            Text(
+                                text = "$ ./view_project.sh --id ${p.id}",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = GitGreen.copy(0.7f),
+                                fontFamily = JetBrainsMono,
+                                maxLines = 1,
+                                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(start = 8.dp).weight(1f, fill = false)
+                            )
+                        }
+                    }
                 }
 
                 Spacer(Modifier.height(Dimens.lg))
@@ -188,6 +199,13 @@ fun ProjectDetailsScreen(
                     }
                 }
             }
+
+            NeonVerticalScrollbar(
+                scrollState = scrollState,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 4.dp, top = 8.dp, bottom = 8.dp)
+            )
         }
     }
 }
